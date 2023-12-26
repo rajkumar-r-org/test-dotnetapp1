@@ -3,6 +3,7 @@ name: .NET Core # will work, but only show the text and not the value $[env.name
 
 on: 
   push:
+    - main
   
   workflow_dispatch: 
 
