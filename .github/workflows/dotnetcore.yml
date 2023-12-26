@@ -55,7 +55,7 @@ jobs:
       uses: actions/download-artifact@v4.1.0
       with:
         name: artifact
-        path: ./
+        path: ./dotnet-core-webapp
 
   webtest:
 
