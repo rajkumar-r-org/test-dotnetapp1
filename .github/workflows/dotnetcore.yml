@@ -47,6 +47,7 @@ jobs:
         NBR: ${{ github.RUN_NUMBER }}
 
   Download:
+    runs-on: windows-latest
     name: Download Artifact
     steps:
     - name: Download
