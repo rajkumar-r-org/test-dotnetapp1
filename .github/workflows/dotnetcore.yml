@@ -10,7 +10,7 @@ env:
   nameVar: "test"
 
 jobs:
-  build-and-deploy:
+  build:
     #name: Testing with ${{ env.nameVar }} this one will not start
     environment: Production
 
@@ -47,6 +47,7 @@ jobs:
         NBR: ${{ github.RUN_NUMBER }}
 
   Download:
+    needs: build
     runs-on: windows-latest
     name: Download Artifact
     steps:
