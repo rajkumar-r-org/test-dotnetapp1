@@ -7,7 +7,7 @@ on:
   workflow_dispatch: 
 
 env:
-  nameVar: "[name from var]"
+  nameVar: "test"
 
 jobs:
   build-and-deploy:
@@ -24,7 +24,7 @@ jobs:
     - name: Setup .NET Core    
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 3.0.100
+        dotnet-version: 7.0.x
     
     # dotnet build and publish
     - name: Build with dotnet ${{ env.nameVar }}
@@ -41,28 +41,7 @@ jobs:
       env: 
         NBR: ${{ github.RUN_NUMBER }}
         
-    # SonarCloud integration
-    - name: SonarCloud Scan
-      uses: rajbos-actions/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # is necessary and is automatically injected by GitHub
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      with: 
-        projectVersion: ${{ github.RUN_NUMBER }}
-        projectBaseDir: dotnet-core-webapp
-        
-    # publish to Azure App Service
-    - name: 'Run Azure webapp deploy action using publish profile credentials'
-      uses: rajbos-actions/webapps-deploy@v2.2.9
-      with: 
-        app-name: dotnetcorewebapp19 # Replace with your app name
-        publish-profile: ${{ secrets.publish_profile }} # Define secret variable in repository settings as per action documentation
-        package: './dotnetcorewebapp' 
-        
-    - name: Curl the website as a smoke test
-      uses: rajbos-actions/curl@61d92b5169ea0425820dd13cf6fbad66b483e9f1
-      with:
-        args: -X GET https://dotnetcorewebapp19.azurewebsites.net/        
+   
 
   webtest:
 
@@ -87,11 +66,3 @@ jobs:
         # execute the tests
         dotnet test -l:trx
 
-    # Using the trx-parser action
-    - name: Parse Trx files
-      uses: rajbos-actions/trx-parser@v0.3.0
-      id: trx-parser
-      with:
-        TRX_PATH: ${{ github.workspace }}\\dotnet-core-webapp.webtests\TestResults #This should be the path to your TRX files
-        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
